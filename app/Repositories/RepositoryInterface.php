@@ -7,7 +7,7 @@ interface RepositoryInterface
 {
     public function create(FactoryInterface $factory, $data): bool;
 
-    public function delete(Model $model): bool;
+    public function delete(Model $model, $id): bool;
 
     public function getAll(Model $model): \Illuminate\Database\Eloquent\Collection;
 

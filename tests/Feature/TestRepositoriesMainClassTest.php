@@ -57,8 +57,16 @@ class TestRepositoriesMainClassTest extends TestCase
     {
         $repo = new Repository();
         $model = School::factory()->create();
-        $this->assertTrue( $repo->delete($model));
-        $this->assertNotNull($model->deleted_at);
+        $this->assertTrue( $repo->delete(new School(), $model->id));
+
+    }
+
+    public function test_delete_repository_no_null()
+    {
+        $repo = new Repository();
+        $model = School::factory()->create();
+        $repo->delete(new School(), $model->id);
+        $this->assertNotNull(School::withTrashed()->find($model->id)->deleted_at);
 
     }
 

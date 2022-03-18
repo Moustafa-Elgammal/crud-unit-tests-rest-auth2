@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Services\Schools;
+
 use App\Factories\SchoolFactoryDB;
 use App\Models\School;
 use App\Repositories\Schools\SchoolsRepository;
@@ -10,7 +12,7 @@ class SchoolsServices extends Services
 {
     private SchoolsRepository $schoolRepository;
     private School $SchoolModel;
-    private $schoolFactory;
+    private SchoolFactoryDB $schoolFactory;
 
     public function __construct()
     {

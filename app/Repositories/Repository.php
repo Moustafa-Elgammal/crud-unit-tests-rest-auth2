@@ -26,10 +26,10 @@ class Repository extends Errors implements RepositoryInterface
         }
     }
 
-    public function delete(Model $model): bool
+    public function delete(Model $model, $id): bool
     {
+        $model = $model->find($id);
         try {
-
             if($model->delete())
                 return  true;
 
