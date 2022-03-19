@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Schools;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Requests\Schools\CreateSchoolRequest;
-use App\Http\Requests\Requests\Schools\UpdateSchoolRequest;
+use App\Http\Requests\Schools\CreateSchoolRequest;
+use App\Http\Requests\Schools\UpdateSchoolRequest;
 use App\Models\School;
 use App\Services\Schools\SchoolsServices;
 use Illuminate\Http\Request;

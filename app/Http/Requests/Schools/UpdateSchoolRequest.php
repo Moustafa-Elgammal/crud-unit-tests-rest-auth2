@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Requests\Schools;
+namespace App\Http\Requests\Schools;
 
+use App\Models\School;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class CreateSchoolRequest extends FormRequest
+class UpdateSchoolRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +15,7 @@ class CreateSchoolRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::id() == 1;
     }
 
     /**
@@ -24,7 +26,7 @@ class CreateSchoolRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:schools,name|min:5|max:50'
+            'name' => 'required|unique:schools,name,'.$this->school
         ];
     }
 }
