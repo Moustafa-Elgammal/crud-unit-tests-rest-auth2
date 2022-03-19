@@ -12,7 +12,16 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use \App\Http\Controllers\Schools\SchoolsAdminController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::prefix('admin')->group(function () {
+    Route::resource('schools',
+        SchoolsAdminController::class,
+        ['only' => ['index', 'store','destroy','update','edit']]
+    );
 });

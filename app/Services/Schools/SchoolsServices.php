@@ -21,6 +21,10 @@ class SchoolsServices extends Services
         $this->SchoolModel = new School();
     }
 
+    /** create school
+     * @param Request $request
+     * @return bool
+     */
     public function createSchool(Request $request)
     {
         $data = new \stdClass();
@@ -37,10 +41,15 @@ class SchoolsServices extends Services
         return true;
     }
 
+    /** update school
+     * @param Request $request
+     * @return bool
+     */
     public function updateSchool(Request $request)
     {
         $data = new \stdClass();
-        $data->id = $request->id;
+
+        $data->id = $request->school;
         $data->name = $request->name;
 
         if(!$this->schoolRepository->update($this->schoolFactory, $data))
@@ -54,9 +63,13 @@ class SchoolsServices extends Services
         return true;
     }
 
-    public function deleteSchool(Request $request)
+    /** Delete School
+     * @param $school
+     * @return bool
+     */
+    public function deleteSchool($school): bool
     {
-        if(!$this->schoolRepository->delete($this->SchoolModel, $request->id))
+        if(!$this->schoolRepository->delete($this->SchoolModel, $school->id))
         {
             foreach ($this->schoolRepository->getErrors() as $error)
                 $this->addError($error);
@@ -67,12 +80,19 @@ class SchoolsServices extends Services
         return  true;
     }
 
-    public function getAllSchools()
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllSchools(): \Illuminate\Database\Eloquent\Collection
     {
         return $this->schoolRepository->getAll($this->SchoolModel);
     }
 
-    public function getSchoolById(Request $request)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function getSchoolById(Request $request): ?\Illuminate\Database\Eloquent\Model
     {
         return $this->schoolRepository->getById($this->SchoolModel, $request->id);
     }
