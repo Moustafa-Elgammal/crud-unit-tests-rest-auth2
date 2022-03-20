@@ -31,16 +31,5 @@ class Student extends Model
             else
                 $student->order = 0;
         });
-
-        static::deleted(function ($student) {
-            $school_students = Student::withoutTrashed()->where('school_id','=',$student->school_id)->get();
-            $order = 1;
-            foreach ($school_students as $s)
-            {
-                $s->order = $order;
-                $s->saveQuietly();
-                $order += 1;
-            }
-        });
     }
 }
