@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Events\SendEmailEvent;
+use App\Listeners\StudentsOrderCommandEnd;
 use App\Models\Student;
 use App\Services\Schools\SchoolsServices;
 use Illuminate\Console\Command;
@@ -53,7 +55,7 @@ class FixStudentOrder extends Command
                 $order += 1;
             }
         }
-
+        event(new SendEmailEvent());
         return 0;
     }
 }
