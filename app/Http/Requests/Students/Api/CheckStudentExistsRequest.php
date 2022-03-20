@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Students;
+namespace App\Http\Requests\Students\Api;
 
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateStudentRequest extends FormRequest
+class CheckStudentExistsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +16,6 @@ class CreateStudentRequest extends FormRequest
      */
     public function authorize()
     {
-//        return Auth::id() == 1;
         return true;
     }
 
@@ -26,8 +27,6 @@ class CreateStudentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' =>'required|min:5|max:50',
-            'school_id' =>'required|exists:schools,id'
         ];
     }
-}
+    }

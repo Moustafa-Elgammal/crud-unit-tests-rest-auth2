@@ -8,7 +8,7 @@ use App\Repositories\Students\StudentsRepository;
 use App\Services\Services;
 use Illuminate\Http\Request;
 
-class StudentsServices extends Services implements StudentsServiceInterface
+class StudentApiServices extends Services implements StudentsServiceInterface
 {
     private StudentsRepository $studentRepository;
     private Student $studentModel;
@@ -49,8 +49,7 @@ class StudentsServices extends Services implements StudentsServiceInterface
     public function updateStudent(Request $request)
     {
         $data = new \stdClass();
-
-        $data->id = $request->student;
+        $data->id = $request->student->id;
         $data->name = $request->name;
         $data->school_id = $request->school_id;
 
