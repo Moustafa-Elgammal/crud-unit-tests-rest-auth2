@@ -86,7 +86,7 @@ class SchoolsAdminController extends Controller
         {
             return redirect()->back()->with('message','Deleted');
         }else{
-            return redirect()->back()->with('errors' , $this->schoolService->getErrors());
+            return redirect()->back()->with('service_errors' , $this->schoolService->getErrors());
         }
     }
 }

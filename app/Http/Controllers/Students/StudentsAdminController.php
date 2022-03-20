@@ -3,21 +3,25 @@
 namespace App\Http\Controllers\Students;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Schools\CreateSchoolRequest;
-use App\Http\Requests\Schools\UpdateSchoolRequest;
-use App\Models\School;
+
+use App\Http\Requests\Students\CreateStudentRequest;
+use App\Http\Requests\Students\UpdateStudentRequest;
+use App\Models\Student;
 use App\Services\Schools\SchoolsServices;
+use App\Services\Students\StudentsServices;
 
 class StudentsAdminController extends Controller
 {
-    protected SchoolsServices $schoolService;
+    protected StudentsServices $studentService;
+    protected SchoolsServices $schoolsServices;
 
     /**
-     * init the school service
+     * init the Student service
      */
     public function __construct()
     {
-        $this->schoolService = new SchoolsServices();
+        $this->studentService = new StudentsServices();
+        $this->schoolsServices = new SchoolsServices();
     }
 
     /**
@@ -27,23 +31,25 @@ class StudentsAdminController extends Controller
      */
     public function index()
     {
-        $schools = $this->schoolService->getAllSchools();
-        return view('schools.index',['schools' => $schools]);
+        $schools = $this->schoolsServices->getAllSchools();
+        $students = $this->studentService->getAllStudents();
+        return view('students.index',['students' => $students, 'schools' => $schools]);
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CreateStudentRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreateSchoolRequest $request)
+    public function store(CreateStudentRequest $request)
     {
-        if ($this->schoolService->createSchool($request))
+        if ($this->studentService->createStudent($request))
         {
             return redirect()->back()->with('message','Created');
         }else{
-            return redirect()->back()->with('service_errors' , $this->schoolService->getErrors());
+            return redirect()->back()->with('service_errors' , $this->studentService->getErrors());
         }
     }
 
@@ -51,41 +57,43 @@ class StudentsAdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\School  $school
+     * @param Student $student
      */
-    public function edit(School $school)
+    public function edit(Student $student)
     {
-        return view('schools.update',['school' => $school]);
+        $schools = $this->schoolsServices->getAllSchools();
+        return view('students.update',['student' => $student, 'schools'=> $schools]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateSchoolRequest  $request
+     * @param UpdateStudentRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(UpdateSchoolRequest $request)
+    public function update(UpdateStudentRequest $request)
     {
-        if ($this->schoolService->updateSchool($request))
+        if ($this->studentService->updateStudent($request))
         {
-            return redirect('admin/schools')->with('message','Updated');
+            return redirect('admin/students')->with('message','Updated');
         }else{
-            return redirect()->back()->with('service_errors' , $this->schoolService->getErrors());
+            return redirect()->back()->with('service_errors' , $this->studentService->getErrors());
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\School $school
+     * @param Student $student
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(School $school): \Illuminate\Http\RedirectResponse
+    public function destroy(Student $student): \Illuminate\Http\RedirectResponse
     {
-        if ($this->schoolService->deleteSchool($school))
+        if ($this->studentService->deleteStudent($student))
         {
             return redirect()->back()->with('message','Deleted');
         }else{
-            return redirect()->back()->with('errors' , $this->schoolService->getErrors());
+            return redirect()->back()->with('service_errors' , $this->studentService->getErrors());
         }
     }
 }

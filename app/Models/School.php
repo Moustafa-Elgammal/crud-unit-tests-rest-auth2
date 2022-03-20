@@ -21,6 +21,10 @@ class School extends Model
         return $this->hasMany(Student::class);
     }
 
+    /** get order for student
+     * @param $id
+     * @return int
+     */
     public static function getOrder($id)
     {
         $students = Student::query()->where('school_id','=',$id)->get();

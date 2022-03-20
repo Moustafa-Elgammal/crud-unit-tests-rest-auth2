@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\School;
 use App\Services\Schools\SchoolsServices;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class SchoolsServiceTest extends TestCase
@@ -38,7 +36,7 @@ class SchoolsServiceTest extends TestCase
 
         $school = School::all()->random();
         $new_name = $this->faker->name;
-        request()->merge(['name' => $new_name, 'id' => $school->id]);
+        request()->merge(['name' => $new_name, 'school' => $school->id]);
 
         $this->assertTrue($service->updateSchool(request()));
         $this->assertEquals($new_name, $service->getSchoolById(request())->name);

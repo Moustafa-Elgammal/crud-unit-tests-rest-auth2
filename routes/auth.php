@@ -10,6 +10,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+use \App\Http\Controllers\Schools\SchoolsAdminController;
+use \App\Http\Controllers\Students\StudentsAdminController;
+
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
@@ -57,7 +60,12 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('admin')->group(function () {
         Route::resource('schools',
-            \App\Http\Controllers\Schools\SchoolsAdminController::class,
+            SchoolsAdminController::class,
+            ['only' => ['index', 'store','destroy','update','edit']]
+        );
+
+        Route::resource('students',
+            StudentsAdminController::class,
             ['only' => ['index', 'store','destroy','update','edit']]
         );
     });

@@ -1,38 +1,39 @@
 <?php
 
-namespace App\Services\Schools;
+namespace App\Services\Students;
 
-use App\Factories\SchoolFactoryDB;
-use App\Models\School;
-use App\Repositories\Schools\SchoolsRepository;
+use App\Factories\StudentFactoryDB;
+use App\Models\Student;
+use App\Repositories\Students\StudentsRepository;
 use App\Services\Services;
 use Illuminate\Http\Request;
 
-class SchoolsServices extends Services
+class StudentsServices extends Services
 {
-    private SchoolsRepository $schoolRepository;
-    private School $SchoolModel;
-    private SchoolFactoryDB $schoolFactory;
+    private StudentsRepository $studentRepository;
+    private Student $studentModel;
+    private StudentFactoryDB $studentFactory;
 
     public function __construct()
     {
-        $this->schoolRepository = new SchoolsRepository();
-        $this->schoolFactory = new SchoolFactoryDB();
-        $this->SchoolModel = new School();
+        $this->studentRepository = new StudentsRepository();
+        $this->studentFactory = new StudentFactoryDB();
+        $this->studentModel = new Student();
     }
 
-    /** create school
+    /** create Student
      * @param Request $request
      * @return bool
      */
-    public function createSchool(Request $request)
+    public function createStudent(Request $request)
     {
         $data = new \stdClass();
         $data->name = $request->name;
+        $data->school_id = $request->school_id;
 
-        if(!$this->schoolRepository->create($this->schoolFactory, $data))
+        if(!$this->studentRepository->create($this->studentFactory, $data))
         {
-            foreach ($this->schoolRepository->getErrors() as $error)
+            foreach ($this->studentRepository->getErrors() as $error)
                 $this->addError($error);
 
             return false;
@@ -41,20 +42,21 @@ class SchoolsServices extends Services
         return true;
     }
 
-    /** update school
+    /** update Student
      * @param Request $request
      * @return bool
      */
-    public function updateSchool(Request $request)
+    public function updateStudent(Request $request)
     {
         $data = new \stdClass();
 
-        $data->id = $request->school;
+        $data->id = $request->student;
         $data->name = $request->name;
+        $data->school_id = $request->school_id;
 
-        if(!$this->schoolRepository->update($this->schoolFactory, $data))
+        if(!$this->studentRepository->update($this->studentFactory, $data))
         {
-            foreach ($this->schoolRepository->getErrors() as $error)
+            foreach ($this->studentRepository->getErrors() as $error)
                 $this->addError($error);
 
             return false;
@@ -63,15 +65,15 @@ class SchoolsServices extends Services
         return true;
     }
 
-    /** Delete School
-     * @param $school
+    /** Delete Student
+     * @param $student
      * @return bool
      */
-    public function deleteSchool($school): bool
+    public function deleteStudent($student): bool
     {
-        if(!$this->schoolRepository->delete($this->SchoolModel, $school->id))
+        if(!$this->studentRepository->delete($this->studentModel, $student->id))
         {
-            foreach ($this->schoolRepository->getErrors() as $error)
+            foreach ($this->studentRepository->getErrors() as $error)
                 $this->addError($error);
 
             return false;
@@ -83,17 +85,17 @@ class SchoolsServices extends Services
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAllSchools(): \Illuminate\Database\Eloquent\Collection
+    public function getAllStudents(): \Illuminate\Database\Eloquent\Collection
     {
-        return $this->schoolRepository->getAll($this->SchoolModel);
+        return $this->studentRepository->getAll($this->studentModel);
     }
 
     /**
      * @param Request $request
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public function getSchoolById(Request $request): ?\Illuminate\Database\Eloquent\Model
+    public function getStudentById(Request $request): ?\Illuminate\Database\Eloquent\Model
     {
-        return $this->schoolRepository->getById($this->SchoolModel, $request->id);
+        return $this->studentRepository->getById($this->studentModel, $request->student);
     }
 }

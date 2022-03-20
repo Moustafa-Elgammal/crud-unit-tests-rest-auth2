@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Schools') }}
+            {{ __('Students') }}
         </h2>
     </x-slot>
 
@@ -12,10 +12,20 @@
                     <br>
                     <div class="md-10 center">
                         <br>
-                        <form class="form-inline" action="{{url('admin/schools')}}" method="post">
+                        <form class="form-inline" action="{{url('admin/students')}}" method="post">
 
                             <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" name="name"
-                                   placeholder="School Name">
+                                   placeholder="Students Name" required>
+
+                            <select  name="school_id" class="form-select" aria-label="Default select example">
+                                <option value="0" selected>Select School</option>
+                                @if(!empty($schools))
+                                    @foreach($schools as $school)
+                                        <option value="{{$school->id}}">{{$school->name}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+
                             @csrf
                             <button type="submit" class="btn btn-primary mb-2">save</button>
                         </form>
@@ -27,18 +37,22 @@
                                 <thead>
                                 <tr>
 
+                                    <th>Student Name</th>
                                     <th>School Name</th>
+                                    <th>Student Order</th>
                                     <th>control</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($schools as $school)
+                                @foreach($students as $student)
                                     <tr>
-                                        <td>{{$school->name}}</td>
+                                        <td>{{$student->name}}</td>
+                                        <td>{{$student->school->name ?? ''}}</td>
+                                        <td>{{$student->order}}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-info" href="{{url("admin/schools/$school->id/edit")}}">update</a>
+                                            <a class="btn btn-sm btn-outline-info" href="{{url("admin/students/$student->id/edit")}}">update</a>
 
-                                            <form method="post" action="{{url("admin/schools/$school->id")}}">
+                                            <form method="post" action="{{url("admin/students/$student->id")}}">
                                                 @csrf
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>

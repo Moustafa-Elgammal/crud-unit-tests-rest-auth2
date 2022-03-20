@@ -2,18 +2,20 @@
 
 namespace App\Factories;
 
-use App\Models\School;
+use App\Models\Student;
 
-class SchoolFactoryDB implements FactoryInterface
+class StudentFactoryDB implements FactoryInterface
 {
     public function make(\stdClass $data)
     {
         if (isset($data->id))
-            $school = School::find($data->id);
+            $student = Student::find($data->id);
         else
-            $school = new school();
+            $student = new Student();
 
-        $school->name = $data->name;
-        return $school;
+        $student->name = $data->name;
+        $student->school_id = $data->school_id;
+
+        return $student;
     }
 }

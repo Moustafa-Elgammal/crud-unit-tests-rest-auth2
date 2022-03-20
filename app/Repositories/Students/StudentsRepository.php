@@ -1,10 +1,10 @@
 <?php
-namespace  App\Repositories\Schools;
+namespace  App\Repositories\Students;
 
 
 use App\Repositories\Repository;
 
-class S extends Repository
+class StudentsRepository extends Repository
 {
 
 }

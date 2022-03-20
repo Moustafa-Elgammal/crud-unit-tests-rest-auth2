@@ -94,6 +94,6 @@ class SchoolsServices extends Services
      */
     public function getSchoolById(Request $request): ?\Illuminate\Database\Eloquent\Model
     {
-        return $this->schoolRepository->getById($this->SchoolModel, $request->id);
+        return $this->schoolRepository->getById($this->SchoolModel, $request->school);
     }
 }

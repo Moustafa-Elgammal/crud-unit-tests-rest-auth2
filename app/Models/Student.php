@@ -21,4 +21,26 @@ class Student extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::saving(function ($student) {
+            if ($student->school)
+                $student->order = $student->school->getOrder($student->school->id);
+            else
+                $student->order = 0;
+        });
+
+        static::deleted(function ($student) {
+            $school_students = Student::withoutTrashed()->where('school_id','=',$student->school_id)->get();
+            $order = 1;
+            foreach ($school_students as $s)
+            {
+                $s->order = $order;
+                $s->saveQuietly();
+                $order += 1;
+            }
+        });
+    }
 }
