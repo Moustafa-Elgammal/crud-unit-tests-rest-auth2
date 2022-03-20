@@ -6,6 +6,7 @@ use App\Factories\SchoolFactoryDB;
 use App\Models\School;
 use App\Repositories\Repository;
 use Database\Factories\SchoolFactory;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,9 @@ use Tests\TestCase;
 
 class TestRepositoriesMainClassTest extends TestCase
 {
+
+    use DatabaseTransactions;
+
 
     protected \Faker\Generator $faker;
     public function __construct(?string $name = null, array $data = [], $dataName = '')

@@ -5,10 +5,14 @@ namespace Tests\Feature;
 use App\Models\School;
 use App\Models\Student;
 use App\Services\Students\StudentsServices;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class StudentsServiceTest extends TestCase
 {
+
+    use DatabaseTransactions;
+
     protected \Faker\Generator $faker;
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
@@ -37,6 +41,8 @@ class StudentsServiceTest extends TestCase
     {
         $service = new StudentsServices();
 
+        School::factory()->create();
+        Student::factory()->create();
         $school = School::all()->random();
         $student = Student::all()->random();
 

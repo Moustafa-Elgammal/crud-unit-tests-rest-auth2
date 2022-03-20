@@ -4,12 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\School;
 use App\Models\Student;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class FixStudentsOrderCommandTest extends TestCase
 {
+    use DatabaseTransactions;
     /**
      * A basic feature test example.
      *

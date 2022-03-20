@@ -4,10 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\School;
 use App\Services\Schools\SchoolsServices;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class SchoolsServiceTest extends TestCase
 {
+    use DatabaseTransactions;
+
     protected \Faker\Generator $faker;
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
