@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class Repository extends Errors implements RepositoryInterface
 {
+    /** create Model
+     * @param FactoryInterface $factory
+     * @param $data
+     * @return bool
+     */
     public function create(FactoryInterface $factory, $data): bool
     {
         $model = $factory->make($data);
@@ -26,6 +31,11 @@ class Repository extends Errors implements RepositoryInterface
         }
     }
 
+    /** delete Model
+     * @param Model $model
+     * @param $id
+     * @return bool
+     */
     public function delete(Model $model, $id): bool
     {
         $model = $model->find($id);
@@ -44,11 +54,20 @@ class Repository extends Errors implements RepositoryInterface
         }
     }
 
+    /** get all model
+     * @param Model $model
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAll(Model $model): \Illuminate\Database\Eloquent\Collection
     {
         return $model::all();
     }
 
+    /** pagination models
+     * @param Model $model
+     * @param $chunk
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function getAllWithPagination(Model $model, $chunk = 30): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return $model::query()->paginate($chunk);
@@ -65,6 +84,11 @@ class Repository extends Errors implements RepositoryInterface
         return $model->find($id);
     }
 
+    /** update model
+     * @param FactoryInterface $factory
+     * @param $data
+     * @return bool
+     */
     public function update(FactoryInterface $factory, $data): bool
     {
         $model = $factory->make($data);

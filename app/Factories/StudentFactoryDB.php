@@ -3,10 +3,15 @@
 namespace App\Factories;
 
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Model;
 
 class StudentFactoryDB implements FactoryInterface
 {
-    public function make(\stdClass $data)
+    /** create new students
+     * @param \stdClass $data
+     * @return Student
+     */
+    public function make(\stdClass $data) :Model
     {
         if (isset($data->id))
             $student = Student::find($data->id);

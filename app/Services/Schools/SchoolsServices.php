@@ -14,6 +14,9 @@ class SchoolsServices extends Services
     private School $SchoolModel;
     private SchoolFactoryDB $schoolFactory;
 
+    /**
+     * init all need  factories, repository and model
+     */
     public function __construct()
     {
         $this->schoolRepository = new SchoolsRepository();

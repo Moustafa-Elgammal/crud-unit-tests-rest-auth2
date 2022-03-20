@@ -2,7 +2,13 @@
 
 namespace App\Factories;
 
+use Illuminate\Database\Eloquent\Model;
+
 interface FactoryInterface
 {
-    public function make(\stdClass $data);
+    /** create new model
+     * @param \stdClass $data
+     * @return mixed
+     */
+    public function make(\stdClass $data): Model;
 }

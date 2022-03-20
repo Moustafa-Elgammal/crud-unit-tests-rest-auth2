@@ -14,6 +14,9 @@ class StudentApiServices extends Services implements StudentsServiceInterface
     private Student $studentModel;
     private StudentFactoryDB $studentFactory;
 
+    /**
+     * init all need  factories, repository and model
+     */
     public function __construct()
     {
         $this->studentRepository = new StudentsRepository();
