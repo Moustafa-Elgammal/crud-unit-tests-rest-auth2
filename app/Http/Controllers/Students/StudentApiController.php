@@ -3,18 +3,14 @@
 namespace App\Http\Controllers\Students;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Students\Api\CheckStudentExistsRequest;
 use App\Http\Requests\Students\Api\CreateStudentRequest;
 use App\Http\Requests\Students\Api\UpdateStudentRequest;
 use App\Models\Student;
-use App\Services\Schools\SchoolsServices;
 use App\Services\Students\StudentApiServices;
-use Illuminate\Http\Request;
 
 class StudentApiController extends Controller
 {
     protected StudentApiServices $studentService;
-    protected SchoolsServices $schoolsServices;
 
     /**
      * init the Student service
@@ -31,7 +27,7 @@ class StudentApiController extends Controller
      */
     public function index()
     {
-        $students = $this->schoolsServices->getAllSchools();
+        $students = $this->studentService->getAllStudents();
         return response()->json(['students' => $students]);
     }
 
