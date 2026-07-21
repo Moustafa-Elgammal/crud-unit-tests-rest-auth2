@@ -6,23 +6,23 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "fruitcake/laravel-cors": "^2.2",
+        "guzzlehttp/guzzle": "^7.15.1",
         "inertiajs/inertia-laravel": "^0.5.4",
-        "laravel/framework": "^8.75",
-        "laravel/passport": "^10.3",
-        "laravel/sanctum": "^2.8",
-        "laravel/tinker": "^2.5",
-        "tightenco/ziggy": "^1.0"
+        "laravel/framework": "^8",
+        "laravel/passport": "^10.4.2",
+        "laravel/sanctum": "^2.15.1",
+        "laravel/tinker": "^2.11.1",
+        "tightenco/ziggy": "^1.8.2"
     },
     "require-dev": {
-        "facade/ignition": "^2.5",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/breeze": "^1.8",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "facade/ignition": "^2.17.7",
+        "fakerphp/faker": "^1.24.1",
+        "laravel/breeze": "^1.10",
+        "laravel/sail": "^1.25.0",
+        "mockery/mockery": "^1.6.12",
+        "nunomaduro/collision": "^5.11",
+        "phpunit/phpunit": "^9.6.35"
     },
     "autoload": {
         "psr-4": {
