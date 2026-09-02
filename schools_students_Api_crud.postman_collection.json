@@ -1,0 +1,233 @@
+{
+	"info": {
+		"_postman_id": "887aad9d-b919-48bb-87ef-81be80db458f",
+		"name": "Schools & Students API (CRUD)",
+		"description": "REST API for the Schools & Students CRUD demo.\n\n**Auth:** OAuth2 password grant (Laravel Passport). Run **Auth → Login (Password Grant)** first — its test script stores `access_token` / `refresh_token` as collection variables, and every other request inherits Bearer auth from the collection.\n\n**Setup**\n1. `php artisan serve` (defaults to http://127.0.0.1:8000)\n2. `php artisan migrate && php artisan db:seed --class=AdminSeeder` (admin@gmail.com / 123456)\n3. `php artisan passport:keys`\n4. `php artisan passport:client --password --name=\"Password Grant Client\"` and paste the printed `Client ID` / `Client Secret` into the `client_id` / `client_secret` collection variables.\n\n**Implemented endpoints:** full CRUD for `students`; `GET /api/schools` only (the other `schools` resource routes are registered but not implemented in `SchoolsApiController`).\n\n**Response shape:** write actions return HTTP 200 with `{ \"success\": bool, \"message\": string, \"errors\": [] }`. Validation failures return `{ \"success\": false, \"message\": \"Validation errors\", \"data\": { <field>: [msg] } }`.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{ "key": "token", "value": "{{access_token}}", "type": "string" }
+		]
+	},
+	"variable": [
+		{ "key": "base_url", "value": "http://127.0.0.1:8000", "type": "string" },
+		{ "key": "client_id", "value": "01a06138-14c8-70a9-a73d-0b6c3254e54e", "type": "string" },
+		{ "key": "client_secret", "value": "49NCazKTxsXN8iq9vQa2C2wOjDmaYfynyQfczyWt", "type": "string" },
+		{ "key": "username", "value": "admin@gmail.com", "type": "string" },
+		{ "key": "password", "value": "123456", "type": "string" },
+		{ "key": "access_token", "value": "", "type": "string" },
+		{ "key": "refresh_token", "value": "", "type": "string" }
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login (Password Grant)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const body = pm.response.json();",
+									"pm.test('status is 200', () => pm.response.to.have.status(200));",
+									"pm.test('access_token present', () => pm.expect(body).to.have.property('access_token'));",
+									"if (body.access_token) {",
+									"    pm.collectionVariables.set('access_token', body.access_token);",
+									"}",
+									"if (body.refresh_token) {",
+									"    pm.collectionVariables.set('refresh_token', body.refresh_token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"grant_type\": \"password\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\",\n    \"scope\": \"\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/oauth/token",
+							"host": [ "{{base_url}}" ],
+							"path": [ "oauth", "token" ]
+						},
+						"description": "Exchanges the admin credentials for a Bearer token. On success the test script saves `access_token` and `refresh_token` to collection variables."
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const body = pm.response.json();",
+									"if (body.access_token) { pm.collectionVariables.set('access_token', body.access_token); }",
+									"if (body.refresh_token) { pm.collectionVariables.set('refresh_token', body.refresh_token); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"grant_type\": \"refresh_token\",\n    \"refresh_token\": \"{{refresh_token}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"scope\": \"\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/oauth/token",
+							"host": [ "{{base_url}}" ],
+							"path": [ "oauth", "token" ]
+						},
+						"description": "Uses the stored `refresh_token` to obtain a fresh access token."
+					},
+					"response": []
+				},
+				{
+					"name": "Current User",
+					"request": {
+						"method": "GET",
+						"header": [ { "key": "Accept", "value": "application/json" } ],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": [ "{{base_url}}" ],
+							"path": [ "api", "user" ]
+						},
+						"description": "Returns the authenticated user (`routes/api.php` closure). Handy for verifying the token."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "List Students",
+					"request": {
+						"method": "GET",
+						"header": [ { "key": "Accept", "value": "application/json" } ],
+						"url": {
+							"raw": "{{base_url}}/api/students",
+							"host": [ "{{base_url}}" ],
+							"path": [ "api", "students" ]
+						},
+						"description": "`{ \"students\": [ { id, name, order, school_id, created_at, updated_at, deleted_at } ] }`"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jane Student\",\n    \"school_id\": 1\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/students",
+							"host": [ "{{base_url}}" ],
+							"path": [ "api", "students" ]
+						},
+						"description": "Validation: `name` required, 5–50 chars; `school_id` required, must exist in `schools`. `order` is assigned automatically per school. Success: `{ \"success\": true, \"message\": \"created\", \"errors\": [] }`."
+					},
+					"response": []
+				},
+				{
+					"name": "Show Student",
+					"request": {
+						"method": "GET",
+						"header": [ { "key": "Accept", "value": "application/json" } ],
+						"url": {
+							"raw": "{{base_url}}/api/students/1",
+							"host": [ "{{base_url}}" ],
+							"path": [ "api", "students", "1" ]
+						},
+						"description": "`{ \"success\": true, \"message\": \"found\", \"student\": { ... }, \"errors\": [] }`"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Student",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jane Student Updated\",\n    \"school_id\": 1\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/students/1",
+							"host": [ "{{base_url}}" ],
+							"path": [ "api", "students", "1" ]
+						},
+						"description": "Same validation as create. Success: `{ \"success\": true, \"message\": \"updated\", \"errors\": [] }`."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student",
+					"request": {
+						"method": "DELETE",
+						"header": [ { "key": "Accept", "value": "application/json" } ],
+						"url": {
+							"raw": "{{base_url}}/api/students/1",
+							"host": [ "{{base_url}}" ],
+							"path": [ "api", "students", "1" ]
+						},
+						"description": "Soft-deletes the student. Success: `{ \"success\": true, \"message\": \"deleted\", \"errors\": [] }`."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schools",
+			"item": [
+				{
+					"name": "List Schools",
+					"protocolProfileBehavior": { "disableBodyPruning": true },
+					"request": {
+						"method": "GET",
+						"header": [ { "key": "Accept", "value": "application/json" } ],
+						"url": {
+							"raw": "{{base_url}}/api/schools",
+							"host": [ "{{base_url}}" ],
+							"path": [ "api", "schools" ]
+						},
+						"description": "`{ \"schools\": [ { id, name, created_at, updated_at, deleted_at } ] }`.\n\nOnly `index` is implemented — `POST/PUT/DELETE /api/schools` routes exist but `SchoolsApiController` has no matching methods and will error. Manage schools through the admin UI (`/admin/schools`) instead."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
